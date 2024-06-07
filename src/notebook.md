@@ -10,9 +10,6 @@ pip install sqlalchemy psycopg2 ipython-sql
 %config SqlMagic.autolimit = 10
 ```
 
-    The sql extension is already loaded. To reload it, use:
-      %reload_ext sql
-
 ## Data Cleaning Basics
 
 ### Applying functions for string cleaning
