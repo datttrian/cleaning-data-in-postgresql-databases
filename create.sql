@@ -48,7 +48,7 @@ CREATE TABLE parking_violation (
 );
 
 CREATE TABLE film_permit (
-    event_id INT,
+    event_id VARCHAR(6),
     event_type VARCHAR(255),
     start_date_time TIMESTAMP,
     end_date_time TIMESTAMP,
