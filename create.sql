@@ -64,6 +64,5 @@ CREATE TABLE film_permit (
     zip_code VARCHAR(255)
 );
 
-
 \copy parking_violation FROM '/tmp/parking_violation.csv' DELIMITER ',' CSV HEADER;
 \copy film_permit FROM '/tmp/film_permit.csv' DELIMITER ',' CSV HEADER;
