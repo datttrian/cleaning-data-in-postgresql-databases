@@ -34,7 +34,16 @@ effect these changes.
 **Answer**
 
 ```{python}
-
+%%sql
+SELECT
+  -- Add 0s to ensure violation_location is 4 characters in length
+  LPAD(violation_location, 4, '0') AS violation_location,
+  -- Replace 'P-U' with 'TRK' in vehicle_body_type column
+  REPLACE(vehicle_body_type, 'P-U', 'TRK') AS vehicle_body_type,
+  -- Ensure only first letter capitalized in street_name
+  INITCAP(street_name) AS street_name
+FROM
+  parking_violation;
 ```
 
 ### Classifying parking violations by time of day
@@ -66,7 +75,26 @@ patterns for `violation_time`s occurring in the morning.
 **Answer**
 
 ```{python}
-
+%%sql
+SELECT 
+	summons_number, 
+    CASE WHEN 
+    	summons_number IN (
+          SELECT 
+  			summons_number 
+  		  FROM 
+  			parking_violation 
+  		  WHERE 
+            -- Match violation_time for morning values
+  			violation_time SIMILAR TO '\d\d\d\dA'
+    	)
+        -- Value when pattern matched
+        THEN 1 
+        -- Value when pattern not matched
+        ELSE 0 
+    END AS morning 
+FROM 
+	parking_violation;
 ```
 
 ### Masking identifying information with regular expressions
@@ -97,7 +125,13 @@ to mask the true license plate number.
 **Answer**
 
 ```{python}
-
+%%sql
+SELECT 
+	summons_number,
+	-- Replace uppercase letters in plate_id with dash
+	REGEXP_REPLACE(plate_id, '[A-Z]', '-', 'g') 
+FROM 
+	parking_violation;
 ```
 
 ### Matching inconsistent color names
@@ -124,7 +158,15 @@ you.
 **Answer**
 
 ```{python}
-
+%%sql
+SELECT
+  summons_number,
+  vehicle_color
+FROM
+  parking_violation
+WHERE
+  -- Match SOUNDEX codes of vehicle_color and 'GRAY'
+  DIFFERENCE(vehicle_color, 'GRAY') = 4;
 ```
 
 ### Standardizing color names
@@ -153,7 +195,23 @@ Again, the `fuzzystrmatch` module has already been installed for you.
 **Answer**
 
 ```{python}
-
+%%sql
+UPDATE 
+	parking_violation
+SET 
+	-- Update vehicle_color to `GRAY`
+	vehicle_color = 'GRAY'
+WHERE 
+	summons_number IN (
+      SELECT
+        summons_number
+      FROM
+        parking_violation
+      WHERE
+        DIFFERENCE(vehicle_color, 'GRAY') = 4 AND
+        -- Filter out records that have GR as vehicle_color
+        vehicle_color != 'GR'
+);
 ```
 
 ### Standardizing multiple colors
@@ -182,7 +240,61 @@ the color name standardization approach. In this exercise, you will:
 **Answer**
 
 ```{python}
+%%sql
+SELECT 
+	summons_number,
+	vehicle_color,
+    -- Include the DIFFERENCE() value for each color
+	DIFFERENCE(vehicle_color, 'RED') AS "red",
+	DIFFERENCE(vehicle_color, 'BLUE') AS "blue",
+	DIFFERENCE(vehicle_color, 'YELLOW') AS "yellow"
+FROM
+	parking_violation
+WHERE 
+	(
+      	-- Condition records on DIFFERENCE() value of 4
+		DIFFERENCE(vehicle_color, 'RED') = 4 OR
+		DIFFERENCE(vehicle_color, 'BLUE') = 4 OR
+		DIFFERENCE(vehicle_color, 'YELLOW') = 4
+	)
+```
 
+```{python}
+%%sql
+SELECT 
+	summons_number,
+    vehicle_color,
+	DIFFERENCE(vehicle_color, 'RED') AS "red",
+	DIFFERENCE(vehicle_color, 'BLUE') AS "blue",
+	DIFFERENCE(vehicle_color, 'YELLOW') AS "yellow"
+FROM
+	parking_violation
+WHERE
+	(
+		DIFFERENCE(vehicle_color, 'RED') = 4 OR
+		DIFFERENCE(vehicle_color, 'BLUE') = 4 OR
+		DIFFERENCE(vehicle_color, 'YELLOW') = 4
+    -- Exclude records with 'BL' and 'BLA' vehicle colors
+	) AND vehicle_color NOT SIMILAR TO 'BL|BLA'
+```
+
+```{python}
+%%sql
+UPDATE 
+	parking_violation pv
+SET 
+	vehicle_color = CASE
+      -- Complete conditions and results
+      WHEN red = 4 THEN 'RED'
+      WHEN blue = 4 THEN 'BLUE'
+      WHEN yellow = 4 THEN 'YELLOW'
+	END
+FROM 
+	red_blue_yellow rby
+WHERE 
+	rby.summons_number = pv.summons_number;
+    
+SELECT * FROM parking_violation LIMIT 10;
 ```
 
 ### Formatting text for colleagues
@@ -210,7 +322,33 @@ one of the previous exercises) will be used to clean the extra spaces.
 **Answer**
 
 ```{python}
+%%sql
+SELECT 
+	-- Add 0s to ensure each event_id is 10 digits in length
+	LPAD(event_id, 10, '0') as event_id, 
+    parking_held 
+FROM 
+    film_permit;
+```
 
+```{python}
+%%sql
+SELECT 
+	LPAD(event_id, 10, '0') as event_id, 
+    -- Fix capitalization in parking_held column
+    INITCAP(parking_held) as parking_held
+FROM 
+    film_permit;
+```
+
+```{python}
+%%sql
+SELECT 
+	LPAD(event_id, 10, '0') as event_id, 
+    -- Replace consecutive spaces with a single space
+    REGEXP_REPLACE(INITCAP(parking_held), ' +', ' ', 'g')  as parking_held
+FROM 
+    film_permit;
 ```
 
 ## Missing, Duplicate, and Invalid Data
@@ -240,7 +378,14 @@ with the string `Unknown`.
 **Answer**
 
 ```{python}
+%%sql
+UPDATE
+  parking_violation
+SET
+  -- Replace NULL vehicle_body_type values with `Unknown`
+  vehicle_body_type = COALESCE(vehicle_body_type, 'Unknown');
 
+SELECT COUNT(*) FROM parking_violation WHERE vehicle_body_type = 'Unknown';
 ```
 
 ### Analyzing incomplete records
@@ -270,7 +415,22 @@ should be developed.
 **Answer**
 
 ```{python}
-
+%%sql
+SELECT
+  -- Define the SELECT list: issuing_agency and num_missing
+  issuing_agency,
+  COUNT(*) AS num_missing
+FROM
+  parking_violation
+WHERE
+  -- Restrict the results to NULL vehicle_body_type values
+  vehicle_body_type IS NULL
+  -- Group results by issuing_agency
+GROUP BY
+  issuing_agency
+  -- Order results by num_missing in descending order
+ORDER BY
+  num_missing DESC;
 ```
 
 ### Duplicate parking violations
@@ -298,7 +458,55 @@ indicating that multiple tickets were issued for the same violation.
 **Answer**
 
 ```{python}
+%%sql
+SELECT
+  	summons_number,
+    -- Use ROW_NUMBER() to define duplicate column
+  	ROW_NUMBER() OVER(
+        PARTITION BY 
+            plate_id, 
+          	issue_date, 
+          	violation_time, 
+          	house_number, 
+          	street_name
+    -- Modify ROW_NUMBER() value to define duplicate column
+      ) - 1 AS duplicate, 
+    plate_id, 
+    issue_date, 
+    violation_time, 
+    house_number, 
+    street_name 
+FROM 
+	parking_violation;
+```
 
+```{python}
+%%sql
+SELECT 
+	-- Include all columns 
+	*
+FROM (
+	SELECT
+  		summons_number,
+  		ROW_NUMBER() OVER(
+        	PARTITION BY 
+            	plate_id, 
+          		issue_date, 
+          		violation_time, 
+          		house_number, 
+          		street_name
+      	) - 1 AS duplicate, 
+      	plate_id, 
+      	issue_date, 
+      	violation_time, 
+      	house_number, 
+      	street_name 
+	FROM 
+		parking_violation
+) sub
+WHERE
+	-- Only return records where duplicate is 1 or more
+	duplicate > 0;
 ```
 
 ### Resolving impartial duplicates
@@ -327,7 +535,19 @@ the duplicate records.
 **Answer**
 
 ```{python}
-
+%%sql
+SELECT 
+	-- Include SELECT list columns
+	summons_number, 
+    MIN(fee) AS fee
+FROM 
+	parking_violation 
+GROUP BY
+	-- Define column for GROUP BY
+	summons_number 
+HAVING 
+	-- Restrict to summons numbers with count greater than 1
+	COUNT(*) > 1;
 ```
 
 ### Detecting invalid values with regular expressions
@@ -362,7 +582,42 @@ including `xxxx` as well as `x` and `xx`.
 **Answer**
 
 ```{python}
+%%sql
+SELECT
+  summons_number,
+  plate_id,
+  registration_state
+FROM
+  parking_violation
+WHERE
+  -- Define the pattern to use for matching
+  registration_state NOT SIMILAR TO '[A-Z]{2}';
+```
 
+```{python}
+%%sql
+SELECT
+  summons_number,
+  plate_id,
+  plate_type
+FROM
+  parking_violation
+WHERE
+  -- Define the pattern to use for matching
+  plate_type NOT SIMILAR TO '[A-Z]{3}';
+```
+
+```{python}
+%%sql
+SELECT
+  summons_number,
+  plate_id,
+  vehicle_make
+FROM
+  parking_violation
+WHERE
+  -- Define the pattern to use for matching
+  vehicle_make NOT SIMILAR TO '[A-Z/\s]+';
 ```
 
 ### Identifying out-of-range vehicle model years
@@ -390,7 +645,17 @@ are considered to be between 1970 and 2021.
 **Answer**
 
 ```{python}
-
+%%sql
+SELECT
+  -- Define the columns to return from the query
+  summons_number,
+  plate_id,
+  vehicle_year
+FROM
+  parking_violation
+WHERE
+  -- Define the range constraint for invalid vehicle years
+  vehicle_year NOT BETWEEN 1970 AND 2021;
 ```
 
 ### Identifying invalid parking violations
@@ -418,7 +683,33 @@ parking tickets with an invalid `violation_time`.
 **Answer**
 
 ```{python}
+%%sql
+SELECT 
+  -- Specify return columns
+  summons_number, 
+  violation_time, 
+  from_hours_in_effect, 
+  to_hours_in_effect 
+FROM 
+  parking_violation 
+WHERE 
+  -- Condition on values outside of the restricted range
+  violation_time NOT BETWEEN from_hours_in_effect AND to_hours_in_effect;
+```
 
+```{python}
+%%sql
+SELECT 
+  summons_number, 
+  violation_time, 
+  from_hours_in_effect, 
+  to_hours_in_effect 
+FROM 
+  parking_violation 
+WHERE 
+  -- Exclude results with overnight restrictions
+  from_hours_in_effect < to_hours_in_effect AND 
+  violation_time NOT BETWEEN from_hours_in_effect AND to_hours_in_effect;
 ```
 
 ### Invalid violations with overnight parking restrictions
@@ -449,7 +740,72 @@ of `10:00 AM`, and a `violation_time` of `4:00 PM` is an invalid record.
 **Answer**
 
 ```{python}
+%%sql
+SELECT
+  summons_number,
+  violation_time,
+  from_hours_in_effect,
+  to_hours_in_effect
+FROM
+  parking_violation
+WHERE
+  -- Ensure from hours greater than to hours
+  from_hours_in_effect > to_hours_in_effect AND
+  -- Ensure violation_time less than from hours
+  violation_time < from_hours_in_effect AND
+  -- Ensure violation_time greater than to hours
+  violation_time > to_hours_in_effect;
+```
 
+### Recovering deleted data
+
+While maintenance of the film permit data was taking place, a mishap
+occurred where the column storing the New York City borough was deleted.
+While the data was backed up the previous day, additional permit
+applications were processed between the time the backup was made and
+when the borough column was removed. In an attempt to recover the
+borough values while preserving the new data, you decide to use some
+data cleaning skills that you have learned to rectify the situation.
+
+Fortunately, a table mapping zip codes and boroughs is available
+(`nyc_zip_codes`). You will use the zip codes from the `film_permit`
+table to re-populate the borough column values. This will be done
+utilizing five sub-queries to specify which of the five boroughs to use
+in the new `borough` column.
+
+**Instructions**
+
+- Define 1 subquery (of the 5) that will be used to select `zip_codes` from the `nyc_zip_codes` table that are in the `borough` of `Manhattan`.
+- Complete the `CASE` statement sub-queries so that the `borough` column is populated by the correct `borough` name when the `zip_code` is matched.
+- Use `NULL` to indicate that the `zip_code` value is not associated to any borough for later investigation.
+
+**Answer**
+
+```{python}
+%%sql
+-- Select all zip codes from the borough of Manhattan
+SELECT zip_code FROM nyc_zip_codes WHERE borough = 'Manhattan';
+```
+
+```{python}
+%%sql
+SELECT 
+	event_id,
+	CASE 
+      WHEN zip_code IN (SELECT zip_code FROM nyc_zip_codes WHERE borough = 'Manhattan') THEN 'Manhattan' 
+      -- Match Brooklyn zip codes
+      WHEN zip_code IN (SELECT zip_code FROM nyc_zip_codes WHERE borough = 'Brooklyn') THEN 'Brooklyn'
+      -- Match Bronx zip codes
+      WHEN zip_code IN (SELECT zip_code FROM nyc_zip_codes WHERE borough = 'Bronx') THEN 'Bronx'
+      -- Match Queens zip codes
+      WHEN zip_code IN (SELECT zip_code FROM nyc_zip_codes WHERE borough = 'Queens') THEN 'Queens'
+      -- Match Staten Island zip codes
+      WHEN zip_code IN (SELECT zip_code FROM nyc_zip_codes WHERE borough = 'Staten Island') THEN 'Staten Island'
+      -- Use default for non-matching zip_code
+      ELSE NULL 
+    END as borough
+FROM
+	film_permit
 ```
 
 ## Converting Data
@@ -485,7 +841,19 @@ recorded address.
 **Answer**
 
 ```{python}
-
+%%sql
+SELECT
+  CASE WHEN
+          -- Use true when column value is 'F'
+          violation_in_front_of_or_opposite = 'F' THEN true
+       WHEN
+          -- Use false when column value is 'O'
+          violation_in_front_of_or_opposite = 'O' THEN false
+       ELSE
+          NULL
+  END AS is_violation_in_front
+FROM
+  parking_violation;
 ```
 
 ### Applying aggregate functions to converted values
@@ -515,7 +883,12 @@ minimum `summons_number`.
 **Answer**
 
 ```{python}
-
+%%sql
+SELECT
+  -- Define the range_size from the max and min summons number
+  MAX(summons_number::BIGINT) - MIN(summons_number::BIGINT) AS range_size
+FROM
+  parking_violation;
 ```
 
 ### Cleaning invalid dates
@@ -538,11 +911,26 @@ proper date.
 
 - Replace `'0'` values in the `date_first_observed` using the `NULLIF()`
   function.
+- Convert the `TEXT` values in the `date_first_observed` column (with `NULL` in place of `'0'`) into `DATE` values.
 
 **Answer**
 
 ```{python}
+%%sql
+SELECT
+  -- Replace '0' with NULL
+  NULLIF(date_first_observed, '0') AS date_first_observed
+FROM
+  parking_violation;
+```
 
+```{python}
+%%sql
+SELECT
+  -- Convert date_first_observed into DATE
+  DATE(NULLIF(date_first_observed, '0')) AS date_first_observed
+FROM
+  parking_violation;
 ```
 
 ### Converting and displaying dates
@@ -563,11 +951,38 @@ In this exercise, you will use `DATE()` to convert
 
 - Convert the `TEXT` columns `issue_date` and `date_first_observed` to
   `DATE` types.
+- Use the `TO_CHAR()` function to display the `issue_date` and `date_first_observed` `DATE` columns in the `YYYYMMDD` format.
 
 **Answer**
 
 ```{python}
+%%sql
+SELECT
+  summons_number,
+  -- Convert issue_date to a DATE
+  DATE(issue_date) AS issue_date,
+  -- Convert date_first_observed to a DATE
+  DATE(date_first_observed) AS date_first_observed
+FROM
+  parking_violation;
+```
 
+```{python}
+%%sql
+SELECT
+  summons_number,
+  -- Display issue_date using the YYYYMMDD format
+  TO_CHAR(issue_date, 'YYYYMMDD') AS issue_date,
+  -- Display date_first_observed using the YYYYMMDD format
+  TO_CHAR(date_first_observed, 'YYYYMMDD') AS date_first_observed
+FROM (
+  SELECT
+    summons_number,
+    DATE(issue_date) AS issue_date,
+    DATE(date_first_observed) AS date_first_observed
+  FROM
+    parking_violation
+) sub
 ```
 
 ### Extracting hours from a time value
@@ -594,11 +1009,40 @@ information.
   minutes (`MI`), and meridian indicator (`AM` or `PM`). `::TIME`
   converts the resulting timestamp value to a `TIME`.
 - Exclude records with a `NULL`-valued `violation_time`.
+- Use the `EXTRACT()` function to complete the query such that the first column of the resulting records is populated by the hour of the `violation_time`.
 
 **Answer**
 
 ```{python}
+%%sql
+SELECT
+  -- Convert violation_time to a TIMESTAMP
+  TO_TIMESTAMP(violation_time, 'HH12MIPM')::TIME AS violation_time
+FROM
+  parking_violation
+WHERE
+  -- Exclude NULL violation_time
+  violation_time IS NOT NULL;
+```
 
+```{python}
+%%sql
+SELECT
+  -- Populate column with violation_time hours
+  EXTRACT('hour' FROM violation_time) AS hour,
+  COUNT(*)
+FROM (
+    SELECT
+      TO_TIMESTAMP(violation_time, 'HH12MIPM')::TIME as violation_time
+    FROM
+      parking_violation
+    WHERE
+      violation_time IS NOT NULL
+) sub
+GROUP BY
+  hour
+ORDER BY
+  hour
 ```
 
 ### A parking violation report by day of the month
@@ -622,11 +1066,38 @@ required to produce the distribution of violations by month day.
 - Use one of the techniques introduced in this chapter to convert a
   string representing a date into a PostgreSQL `DATE` to convert
   `issue_date` into a `DATE` value.
+- Extract the `day` from each `issue_date` returned by the subquery to create a column named `issue_day`.
+- Include a second column providing the count for every day in which a violation occurred.
 
 **Answer**
 
 ```{python}
+%%sql
+SELECT
+  -- Convert issue_date to a DATE value
+  DATE(issue_date) AS issue_date
+FROM
+  parking_violation;
+```
 
+```{python}
+%%sql
+SELECT
+  -- Create issue_day from the day value of issue_date
+  EXTRACT('day' FROM issue_date) AS issue_day,
+  -- Include the count of violations for each day
+  COUNT(*)
+FROM (
+  SELECT
+    -- Convert issue_date to a `DATE` value
+    DATE(issue_date) AS issue_date
+  FROM
+    parking_violation
+) sub
+GROUP BY
+  issue_day
+ORDER BY
+  issue_day;
 ```
 
 ### Risky parking behavior
@@ -653,11 +1124,57 @@ before `to_hours_in_effect`.
   `::TIME` converts the value to a `TIME`.
 - Exclude locations having **both** a `from_hours_in_effect` value of
   `1200AM` and a `to_hours_in_effect` value of `1159PM`.
+- Use the `EXTRACT()` function to create two columns representing the number of hours and minutes, respectively, between `violation_time` and `to_hours_in_effect`.
 
 **Answer**
 
 ```{python}
+%%sql
+SELECT
+  summons_number,
+  -- Convert violation_time to a TIMESTAMP
+  TO_TIMESTAMP(violation_time, 'HH12MIPM')::TIME as violation_time,
+  -- Convert to_hours_in_effect to a TIMESTAMP
+  TO_TIMESTAMP(to_hours_in_effect, 'HH12MIPM')::TIME as to_hours_in_effect
+FROM
+  parking_violation
+WHERE
+  -- Exclude all day parking restrictions
+  NOT (from_hours_in_effect = '1200AM' AND to_hours_in_effect = '1159PM');
+```
 
+```{python}
+%%sql
+SELECT
+  summons_number,
+  -- Create column for hours between to_hours_in_effect and violation_time
+  EXTRACT('hour' FROM to_hours_in_effect - violation_time) AS hours,
+  -- Create column for minutes between to_hours_in_effect and violation_time
+  EXTRACT('minute' FROM to_hours_in_effect - violation_time) AS minutes
+FROM (
+  SELECT
+    summons_number,
+    TO_TIMESTAMP(violation_time, 'HH12MIPM')::time as violation_time,
+    TO_TIMESTAMP(to_hours_in_effect, 'HH12MIPM')::time as to_hours_in_effect
+  FROM
+    parking_violation
+  WHERE
+    NOT (from_hours_in_effect = '1200AM' AND to_hours_in_effect = '1159PM')
+) sub
+```
+
+```{python}
+%%sql
+SELECT
+  -- Return the count of records
+  COUNT(*)
+FROM
+  time_differences
+WHERE
+  -- Include records with a hours value of 0
+  hours = 0 AND
+  -- Include records with a minutes value of at most 59
+  minutes <= 59;
 ```
 
 ## Transforming Data
@@ -682,11 +1199,41 @@ parking violations occurring at a corner will be tallied by a SQL query.
   spaces), and `intersecting_street` to create a column named `corner`.
   Write the query such that records without an `intersecting_street`
   value have `NULL` column entries.
+- Use the `corner` query that you just completed to generate a column with the `corner` value and a second column with the total number of violations occurring at each corner.
+- Exclude `corner` values that are `NULL`.
 
 **Answer**
 
 ```{python}
+%%sql
+SELECT
+  -- Combine street_name, ' & ', and intersecting_street
+  street_name || ' & ' || intersecting_street AS corner
+FROM
+  parking_violation;
+```
 
+```{python}
+%%sql
+SELECT
+  -- Include the corner in results
+  corner,
+  -- Include the total number of violations occurring at corner
+  COUNT(*)
+FROM (
+  SELECT
+    -- Concatenate street_name, ' & ', and intersecting_street
+    street_name || ' & ' || intersecting_street AS corner
+  FROM
+    parking_violation
+) sub
+WHERE
+  -- Exclude corner values that are NULL
+  corner IS NOT NULL
+GROUP BY
+  corner
+ORDER BY
+  count DESC
 ```
 
 ### Creating a TIMESTAMP with concatenation
@@ -710,11 +1257,31 @@ converting the resulting strings to `TIMESTAMP` values.
 - Concatenate the `issue_date` column, a space character (`' '`), and
   the `violation_time` column to create a `violation_datetime` column in
   the query results.
+- Complete the query so that the `violation_datetime` strings returned by the subquery are converted into proper `TIMESTAMP` values using the format string `MM/DD/YYYY HH12MIAM`.
+
 
 **Answer**
 
 ```{python}
+%%sql
+SELECT
+  -- Concatenate issue_date and violation_time columns
+  CONCAT(issue_date, ' ', violation_time) AS violation_datetime
+FROM
+  parking_violation;
+```
 
+```{python}
+%%sql
+SELECT
+  -- Convert violation_time to TIMESTAMP
+  TO_TIMESTAMP(violation_datetime, 'MM/DD/YYYY HH12MIAM') AS violation_datetime
+FROM (
+  SELECT
+    CONCAT(issue_date, ' ', violation_time) AS violation_datetime
+  FROM
+    parking_violation
+) sub;
 ```
 
 ### Extracting time units with SUBSTRING()
@@ -736,11 +1303,27 @@ extracting time units removing the need to convert the string to a
 
 - Define the `hour` column as the substring starting at the 1st position
   in `violation_time` and extending 2 characters in length.
+- Add a definition for the `minute` column in the results as the substring starting at the 3rd position in `violation_time` and extending 2 characters in length.
 
 **Answer**
 
 ```{python}
+%%sql
+SELECT
+  -- Define hour column
+  SUBSTRING(violation_time FROM 1 FOR 2) AS hour
+FROM
+  parking_violation;
+```
 
+```{python}
+%%sql
+SELECT
+  SUBSTRING(violation_time FROM 1 FOR 2) AS hour,
+  -- Define minute column
+  SUBSTRING(violation_time FROM 3 FOR 2) AS minute
+FROM
+  parking_violation;
 ```
 
 ### Extracting house numbers from a string
@@ -763,11 +1346,34 @@ to extract the specific house number from Queens street addresses.
 - Write a query that returns the position in the `house_number` column
   where the first dash character (`-`) location is found or 0 if the
   `house_number` does not contain a dash (`-`).
+- Complete the query such that `new_house_number` contains just the Queens house number. The house number begins **1 position beyond** the position containing a dash (`-`) and extends to the end of the original `house_number` value.
 
 **Answer**
 
 ```{python}
+%%sql
+SELECT
+  -- Find the position of first '-'
+  STRPOS(house_number, '-') AS dash_position
+FROM
+  parking_violation;
+```
 
+```{python}
+%%sql
+SELECT
+  house_number,
+  -- Extract the substring after '-'
+  SUBSTRING(
+    -- Specify the column of the original house number
+    house_number
+    -- Calculate the position that is 1 beyond '-'
+    FROM STRPOS(house_number, '-') + 1
+    -- Calculate number characters from dash to end of string
+    FOR LENGTH(house_number) - STRPOS(house_number, '-')
+  ) AS new_house_number
+FROM
+  parking_violation;
 ```
 
 ### Splitting house numbers with a delimiter
@@ -790,7 +1396,14 @@ using the `SPLIT_PART()` function.
 **Answer**
 
 ```{python}
-
+%%sql
+SELECT
+  -- Split house_number using '-' as the delimiter
+  SPLIT_PART(house_number, '-', 2) AS new_house_number
+FROM
+  parking_violation
+WHERE
+  violation_county = 'Q';
 ```
 
 ### Mapping parking restrictions
@@ -817,11 +1430,41 @@ availability.
   availability symbol (`B` or `Y`).
 - Include `street_address` and `violation_county` as columns so that
   each row contains these associated values.
+- Use the `ROW_NUMBER()` function to enumerate each combination of `street_address` and `violation_county` values with a number from 1 (Monday) to 7 (Sunday) corresponding to the `daily_parking_restriction` values.
+
 
 **Answer**
 
 ```{python}
+%%sql
+SELECT
+  -- Specify SELECT list columns
+  street_address,
+  violation_county,
+  REGEXP_SPLIT_TO_TABLE(days_parking_in_effect, '') AS daily_parking_restriction
+FROM
+  parking_restriction;
+```
 
+```{python}
+%%sql
+SELECT
+  -- Label daily parking restrictions for locations by day
+  ROW_NUMBER() OVER(
+    PARTITION BY
+        street_address, violation_county
+    ORDER BY
+        street_address, violation_county
+  ) AS day_number,
+  *
+FROM (
+  SELECT
+    street_address,
+    violation_county,
+    REGEXP_SPLIT_TO_TABLE(days_parking_in_effect, '') AS daily_parking_restriction
+  FROM
+    parking_restriction
+) sub;
 ```
 
 ### Selecting data for a pivot table
@@ -852,7 +1495,24 @@ agency code, and the total number of records with each pair of values.
 **Answer**
 
 ```{python}
-
+%%sql
+SELECT 
+	-- Include the violation code in results
+	violation_code, 
+    -- Include the issuing agency in results
+    issuing_agency, 
+    -- Number of records with violation code/issuing agency
+    COUNT(*) 
+FROM 
+	parking_violation 
+WHERE 
+	-- Restrict the results to the agencies of interest
+	issuing_agency IN ('P', 'S', 'K', 'V') 
+GROUP BY 
+	-- Define GROUP BY columns to ensure correct pair count
+	violation_code, issuing_agency
+ORDER BY 
+	violation_code, issuing_agency;
 ```
 
 ### Using FILTER to create a pivot table
@@ -884,7 +1544,23 @@ issued by each of the four agencies of interest.
 **Answer**
 
 ```{python}
-
+%%sql
+SELECT 
+	violation_code,
+    -- Define the "Police" column
+	COUNT(issuing_agency) FILTER (WHERE issuing_agency = 'P') AS "Police",
+    -- Define the "Sanitation" column
+	COUNT(issuing_agency) FILTER (WHERE issuing_agency = 'S') AS "Sanitation",
+    -- Define the "Parks" column
+	COUNT(issuing_agency) FILTER (WHERE issuing_agency = 'K') AS "Parks",
+    -- Define the "Transportation" column
+	COUNT(issuing_agency) FILTER (WHERE issuing_agency = 'V') AS "Transportation"
+FROM 
+	parking_violation 
+GROUP BY 
+	violation_code
+ORDER BY 
+	violation_code
 ```
 
 ### Aggregating film categories
@@ -910,10 +1586,41 @@ results in a pivot table.
   as the **2-character** delimiter.
 - Restrict the `category` values to `'Film'`, `'Television'`, and
   `'Documentary'`.
+- Convert `community_board` values to `INTEGER` so that `community_board` values are listed in ascending order.
+- Define the `Film`, `Television`, and `Documentary` pivot table columns as the number of permits of each type for each community board.
 
 **Answer**
 
 ```{python}
-
+%%sql
+CREATE OR REPLACE TEMP VIEW cb_categories AS  
+SELECT
+	-- Split community board values
+	REGEXP_SPLIT_TO_TABLE(community_board, ', ') AS community_board,
+	category
+FROM
+	film_permit
+WHERE 
+	-- Restrict the categories in results
+	category IN ('Film', 'Television', 'Documentary');
+    
+-- View cb_categories
+SELECT * FROM cb_categories;
 ```
 
+```{python}
+%%sql
+SELECT
+	-- Convert community_board data type
+	CAST(community_board AS INTEGER) AS community_board,
+    -- Define pivot table columns
+	COUNT(category) FILTER(where category = 'Film') AS "Film",
+    COUNT(category) FILTER(where category = 'Television') AS "Television",
+	COUNT(category) FILTER(where category = 'Documentary') AS "Documentary"
+FROM
+	cb_categories
+GROUP BY 
+	community_board
+ORDER BY 
+	community_board;
+```
