@@ -1,4 +1,5 @@
 DROP TABlE parking_violation;
+DROP TABlE film_permit;
 
 CREATE TABLE parking_violation (
     summons_number BIGINT PRIMARY KEY,
@@ -46,4 +47,23 @@ CREATE TABLE parking_violation (
     double_parking_violation BOOLEAN
 );
 
+CREATE TABLE film_permit (
+    event_id INT,
+    event_type VARCHAR(255),
+    start_date_time TIMESTAMP,
+    end_date_time TIMESTAMP,
+    entered_on TIMESTAMP,
+    event_agency VARCHAR(255),
+    parking_held TEXT,
+    borough VARCHAR(255),
+    community_board VARCHAR(255),
+    police_precinct VARCHAR(255),
+    category VARCHAR(255),
+    sub_category_name VARCHAR(255),
+    country VARCHAR(255),
+    zip_code VARCHAR(255)
+);
+
+
 \copy parking_violation FROM '/tmp/parking_violation.csv' DELIMITER ',' CSV HEADER;
+\copy film_permit FROM '/tmp/film_permit.csv' DELIMITER ',' CSV HEADER;
