@@ -8,3 +8,4 @@ docker cp parking_violation.csv  pg-docker:/tmp/parking_violation.csv
 docker cp film_permit.csv  pg-docker:/tmp/film_permit.csv
 
 docker exec -it pg-docker /bin/bash
+psql -d local postgres
