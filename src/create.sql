@@ -29,7 +29,7 @@ CREATE TABLE parking_violation (
     house_number VARCHAR(10),
     street_name VARCHAR(50),
     intersecting_street VARCHAR(50),
-    date_first_observed INT,
+    date_first_observed TEXT,
     law_section INT,
     sub_division VARCHAR(10),
     violation_legal_code VARCHAR(10),
