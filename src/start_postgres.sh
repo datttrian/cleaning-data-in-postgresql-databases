@@ -6,6 +6,7 @@ docker run --rm --name pg-docker -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=lo
 
 docker cp parking_violation.csv  pg-docker:/tmp/parking_violation.csv
 docker cp film_permit.csv  pg-docker:/tmp/film_permit.csv
+docker cp nyc_zip_codes.csv  pg-docker:/tmp/nyc_zip_codes.csv
 
 docker exec -it pg-docker /bin/bash
 psql -d local postgres
