@@ -779,11 +779,6 @@ SELECT
 FROM
   cb_categories;
 
-select
-  *
-from
-  cb_categories;
-
 SELECT
   -- Convert community_board data type
   CAST(community_board AS INTEGER) AS community_board,

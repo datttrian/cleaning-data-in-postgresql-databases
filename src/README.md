@@ -4374,65 +4374,6 @@ SELECT * FROM cb_categories;
 
 ```sql
 %%sql
-select * from cb_categories;
-```
-
-     * postgresql://postgres:***@localhost/local
-    4439 rows affected.
-
-<table>
-    <thead>
-        <tr>
-            <th>community_board</th>
-            <th>category</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>2</td>
-            <td>Television</td>
-        </tr>
-        <tr>
-            <td>12</td>
-            <td>Film</td>
-        </tr>
-        <tr>
-            <td>8</td>
-            <td>Film</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Television</td>
-        </tr>
-        <tr>
-            <td>5</td>
-            <td>Television</td>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>Television</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Television</td>
-        </tr>
-        <tr>
-            <td>6</td>
-            <td>Film</td>
-        </tr>
-        <tr>
-            <td>5</td>
-            <td>Television</td>
-        </tr>
-        <tr>
-            <td>11</td>
-            <td>Television</td>
-        </tr>
-    </tbody>
-</table>
-
-```sql
-%%sql
 SELECT
     -- Convert community_board data type
     CAST(community_board AS INTEGER) AS community_board,
@@ -4454,7 +4395,6 @@ GROUP BY
     community_board
 ORDER BY
     community_board;
-
 ```
 
      * postgresql://postgres:***@localhost/local
