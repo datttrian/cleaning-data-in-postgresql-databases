@@ -1,5 +1,6 @@
 DROP TABlE parking_violation;
 DROP TABlE film_permit;
+DROP TABLE nyc_zip_codes;
 
 CREATE TABLE parking_violation (
     summons_number BIGINT PRIMARY KEY,
@@ -64,5 +65,11 @@ CREATE TABLE film_permit (
     zip_code VARCHAR(255)
 );
 
+CREATE TABLE nyc_zip_codes (
+    borough TEXT,
+    zip_code TEXT
+);
+
 \copy parking_violation FROM '/tmp/parking_violation.csv' DELIMITER ',' CSV HEADER;
 \copy film_permit FROM '/tmp/film_permit.csv' DELIMITER ',' CSV HEADER;
+\copy nyc_zip_codes FROM '/tmp/nyc_zip_codes.csv' DELIMITER ',' CSV HEADER;
