@@ -1948,25 +1948,6 @@ HAVING
  COUNT(*) > 1;
 ```
 
-     * postgresql://postgres:***@localhost/local
-    (psycopg2.errors.UndefinedColumn) column "fee" does not exist
-    LINE 4:     MIN(fee) AS fee
-                    ^
-    
-    [SQL: SELECT 
-     -- Include SELECT list columns
-     summons_number, 
-        MIN(fee) AS fee
-    FROM 
-     parking_violation 
-    GROUP BY
-     -- Define column for GROUP BY
-     summons_number 
-    HAVING 
-     -- Restrict to summons numbers with count greater than 1
-     COUNT(*) > 1;]
-    (Background on this error at: https://sqlalche.me/e/20/f405)
-
 ### Detecting invalid values with regular expressions
 
 In the video exercise, we saw that there are a number of ways to detect
@@ -2228,24 +2209,6 @@ WHERE
   vehicle_year NOT BETWEEN 1970 AND 2021;
 
 ```
-
-     * postgresql://postgres:***@localhost/local
-    (psycopg2.errors.UndefinedFunction) operator does not exist: text < integer
-    LINE 10:   vehicle_year NOT BETWEEN 1970 AND 2021;
-                            ^
-    HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
-    
-    [SQL: SELECT
-      -- Define the columns to return from the query
-      summons_number,
-      plate_id,
-      vehicle_year
-    FROM
-      parking_violation
-    WHERE
-      -- Define the range constraint for invalid vehicle years
-      vehicle_year NOT BETWEEN 1970 AND 2021;]
-    (Background on this error at: https://sqlalche.me/e/20/f405)
 
 ### Identifying invalid parking violations
 
