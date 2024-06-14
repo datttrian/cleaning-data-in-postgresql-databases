@@ -10,9 +10,6 @@ pip install sqlalchemy psycopg2 ipython-sql
 %config SqlMagic.autolimit = 10
 ```
 
-    The sql extension is already loaded. To reload it, use:
-      %reload_ext sql
-
 ## Data Cleaning Basics
 
 ### Applying functions for string cleaning
@@ -350,11 +347,13 @@ CREATE EXTENSION fuzzystrmatch;
 ```
 
      * postgresql://postgres:***@localhost/local
-    (psycopg2.errors.DuplicateObject) extension "fuzzystrmatch" already exists
-    
-    [SQL: -- added/edited
-    CREATE EXTENSION fuzzystrmatch;]
-    (Background on this error at: https://sqlalche.me/e/20/f405)
+    Done.
+
+
+
+
+
+    []
 
 ```sql
 %%sql
@@ -736,26 +735,13 @@ WHERE
 ```
 
      * postgresql://postgres:***@localhost/local
-    (psycopg2.errors.DuplicateTable) relation "red_blue_yellow" already exists
-    
-    [SQL: -- added/edited
-    CREATE TABLE red_blue_yellow AS
-    SELECT 
-     summons_number,
-        vehicle_color,
-     DIFFERENCE(vehicle_color, 'RED') AS "red",
-     DIFFERENCE(vehicle_color, 'BLUE') AS "blue",
-     DIFFERENCE(vehicle_color, 'YELLOW') AS "yellow"
-    FROM
-     parking_violation
-    WHERE
-     (
-      DIFFERENCE(vehicle_color, 'RED') = 4 OR
-      DIFFERENCE(vehicle_color, 'BLUE') = 4 OR
-      DIFFERENCE(vehicle_color, 'YELLOW') = 4
-        -- Exclude records with 'BL' and 'BLA' vehicle colors
-     ) AND vehicle_color NOT SIMILAR TO 'BL|BLA']
-    (Background on this error at: https://sqlalche.me/e/20/f405)
+    598 rows affected.
+
+
+
+
+
+    []
 
 ```sql
 %%sql
@@ -834,7 +820,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>JCV6523</td>
             <td>NY</td>
             <td>PAS</td>
-            <td>2019-06-28</td>
+            <td>06/28/2019</td>
             <td>20</td>
             <td>SDN</td>
             <td>TOYOT</td>
@@ -864,7 +850,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>ALL</td>
             <td>ALL</td>
             <td>GY</td>
-            <td>False</td>
+            <td>0</td>
             <td>0</td>
             <td>-</td>
             <td>0</td>
@@ -879,7 +865,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>GMK6954</td>
             <td>NY</td>
             <td>PAS</td>
-            <td>2019-06-16</td>
+            <td>06/16/2019</td>
             <td>19</td>
             <td>SUBN</td>
             <td>BMW</td>
@@ -909,7 +895,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>ALL</td>
             <td>ALL</td>
             <td>BLK</td>
-            <td>False</td>
+            <td>0</td>
             <td>2019</td>
             <td>-</td>
             <td>0</td>
@@ -924,7 +910,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>JGX1641</td>
             <td>NY</td>
             <td>PAS</td>
-            <td>2019-06-24</td>
+            <td>06/24/2019</td>
             <td>19</td>
             <td>SDN</td>
             <td>AUDI</td>
@@ -954,7 +940,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>ALL</td>
             <td>ALL</td>
             <td>BLK</td>
-            <td>False</td>
+            <td>0</td>
             <td>2015</td>
             <td>-</td>
             <td>0</td>
@@ -969,7 +955,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>GDM8069</td>
             <td>NY</td>
             <td>COM</td>
-            <td>2019-07-06</td>
+            <td>07/06/2019</td>
             <td>48</td>
             <td>None</td>
             <td>None</td>
@@ -999,7 +985,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>ALL</td>
             <td>ALL</td>
             <td>None</td>
-            <td>False</td>
+            <td>0</td>
             <td>0</td>
             <td>-</td>
             <td>0</td>
@@ -1014,7 +1000,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>HXH5242</td>
             <td>NY</td>
             <td>PAS</td>
-            <td>2019-06-14</td>
+            <td>06/14/2019</td>
             <td>46</td>
             <td>SUBN</td>
             <td>NISSA</td>
@@ -1044,7 +1030,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>ALL</td>
             <td>ALL</td>
             <td>GY</td>
-            <td>False</td>
+            <td>0</td>
             <td>0</td>
             <td>-</td>
             <td>0</td>
@@ -1059,7 +1045,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>HXM3470</td>
             <td>NY</td>
             <td>PAS</td>
-            <td>2019-06-14</td>
+            <td>06/14/2019</td>
             <td>40</td>
             <td>SUBN</td>
             <td>TOYOT</td>
@@ -1089,7 +1075,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>ALL</td>
             <td>ALL</td>
             <td>BK</td>
-            <td>False</td>
+            <td>0</td>
             <td>2005</td>
             <td>-</td>
             <td>1</td>
@@ -1104,7 +1090,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>GWH9640</td>
             <td>NY</td>
             <td>PAS</td>
-            <td>2019-06-14</td>
+            <td>06/14/2019</td>
             <td>46</td>
             <td>SUBN</td>
             <td>HONDA</td>
@@ -1134,7 +1120,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>ALL</td>
             <td>ALL</td>
             <td>GY</td>
-            <td>False</td>
+            <td>0</td>
             <td>2003</td>
             <td>-</td>
             <td>0</td>
@@ -1149,7 +1135,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>HKB1769</td>
             <td>NY</td>
             <td>PAS</td>
-            <td>2019-06-28</td>
+            <td>06/28/2019</td>
             <td>40</td>
             <td>SUBN</td>
             <td>TOYOT</td>
@@ -1179,7 +1165,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>ALL</td>
             <td>ALL</td>
             <td>GY</td>
-            <td>False</td>
+            <td>0</td>
             <td>2004</td>
             <td>-</td>
             <td>0</td>
@@ -1194,7 +1180,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>GDH2184</td>
             <td>ME</td>
             <td>PAS</td>
-            <td>2019-07-06</td>
+            <td>07/06/2019</td>
             <td>48</td>
             <td>SDN</td>
             <td>DODGE</td>
@@ -1224,7 +1210,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>ALL</td>
             <td>ALL</td>
             <td>ORANG</td>
-            <td>False</td>
+            <td>0</td>
             <td>0</td>
             <td>-</td>
             <td>0</td>
@@ -1239,7 +1225,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>JCA5331</td>
             <td>NY</td>
             <td>PAS</td>
-            <td>2019-07-01</td>
+            <td>07/01/2019</td>
             <td>46</td>
             <td>SDN</td>
             <td>ACURA</td>
@@ -1269,7 +1255,7 @@ SELECT * FROM parking_violation LIMIT 10;
             <td>ALL</td>
             <td>ALL</td>
             <td>WH</td>
-            <td>False</td>
+            <td>0</td>
             <td>0</td>
             <td>-</td>
             <td>0</td>
@@ -1310,7 +1296,7 @@ one of the previous exercises) will be used to clean the extra spaces.
 %%sql
 SELECT 
  -- Add 0s to ensure each event_id is 10 digits in length
- LPAD(event_id, 10, '0') as event_id, 
+ LPAD(CAST(event_id AS TEXT), 10, '0') as event_id,  -- added/edited
     parking_held 
 FROM 
     film_permit;
@@ -1373,7 +1359,7 @@ FROM
 ```sql
 %%sql
 SELECT 
- LPAD(event_id, 10, '0') as event_id, 
+ LPAD(CAST(event_id AS TEXT), 10, '0') as event_id,  -- added/edited
     -- Fix capitalization in parking_held column
     INITCAP(parking_held) as parking_held
 FROM 
@@ -1437,7 +1423,7 @@ FROM
 ```sql
 %%sql
 SELECT 
- LPAD(event_id, 10, '0') as event_id, 
+ LPAD(CAST(event_id AS TEXT), 10, '0') as event_id,  -- added/edited
     -- Replace consecutive spaces with a single space
     REGEXP_REPLACE(INITCAP(parking_held), ' +', ' ', 'g')  as parking_held
 FROM 
@@ -1694,7 +1680,7 @@ FROM
             <td>1449776220</td>
             <td>0</td>
             <td>G11LHN</td>
-            <td>2019-06-22</td>
+            <td>06/22/2019</td>
             <td>0245A</td>
             <td>210</td>
             <td>WASHINGTON AVE</td>
@@ -1703,7 +1689,7 @@ FROM
             <td>1447011338</td>
             <td>0</td>
             <td>G14GBZ</td>
-            <td>2019-06-30</td>
+            <td>06/30/2019</td>
             <td>0416P</td>
             <td>6</td>
             <td>WEST 72 ST</td>
@@ -1712,7 +1698,7 @@ FROM
             <td>1434030386</td>
             <td>0</td>
             <td>G31KZC</td>
-            <td>2019-06-14</td>
+            <td>06/14/2019</td>
             <td>0905A</td>
             <td>1061</td>
             <td>HALL PLACE</td>
@@ -1721,7 +1707,7 @@ FROM
             <td>1446484129</td>
             <td>0</td>
             <td>G442853</td>
-            <td>2019-07-06</td>
+            <td>07/06/2019</td>
             <td>0635P</td>
             <td>1591</td>
             <td>GRAND CONCOURSE</td>
@@ -1730,7 +1716,7 @@ FROM
             <td>1447104134</td>
             <td>0</td>
             <td>G47GYK</td>
-            <td>2019-06-20</td>
+            <td>06/20/2019</td>
             <td>0825A</td>
             <td>210</td>
             <td>E 102 ST</td>
@@ -1739,7 +1725,7 @@ FROM
             <td>1453986935</td>
             <td>0</td>
             <td>G51FER</td>
-            <td>2019-06-27</td>
+            <td>06/27/2019</td>
             <td>0310P</td>
             <td>62</td>
             <td>WALL ST</td>
@@ -1748,7 +1734,7 @@ FROM
             <td>1454213700</td>
             <td>0</td>
             <td>G52LHB</td>
-            <td>2019-07-04</td>
+            <td>07/04/2019</td>
             <td>1210P</td>
             <td>None</td>
             <td>E/O ALBERMARLE RD</td>
@@ -1757,7 +1743,7 @@ FROM
             <td>1452146184</td>
             <td>0</td>
             <td>G54KYP</td>
-            <td>2019-06-28</td>
+            <td>06/28/2019</td>
             <td>0928A</td>
             <td>407</td>
             <td>W 146TH ST</td>
@@ -1766,7 +1752,7 @@ FROM
             <td>1446710105</td>
             <td>0</td>
             <td>G5535J</td>
-            <td>2019-06-14</td>
+            <td>06/14/2019</td>
             <td>1215P</td>
             <td>1135</td>
             <td>EAST 229TH STREET</td>
@@ -1775,7 +1761,7 @@ FROM
             <td>1418499006</td>
             <td>0</td>
             <td>G5535J</td>
-            <td>2019-07-10</td>
+            <td>07/10/2019</td>
             <td>1024A</td>
             <td>2500</td>
             <td>CROTONA AVE</td>
@@ -1829,10 +1815,10 @@ WHERE
     </thead>
     <tbody>
         <tr>
-            <td>1448411579</td>
+            <td>1448411580</td>
             <td>1</td>
             <td>GEW9007</td>
-            <td>2019-06-30</td>
+            <td>06/30/2019</td>
             <td>0258P</td>
             <td>172-61</td>
             <td>BAISLEY BLVD</td>
@@ -1841,16 +1827,16 @@ WHERE
             <td>1410920458</td>
             <td>1</td>
             <td>GEX3870</td>
-            <td>2019-06-20</td>
+            <td>06/20/2019</td>
             <td>1030P</td>
             <td>1520</td>
             <td>GRAND CONCOURSE</td>
         </tr>
         <tr>
-            <td>1446413159</td>
+            <td>1446413147</td>
             <td>1</td>
             <td>GFD4777</td>
-            <td>2019-06-30</td>
+            <td>06/30/2019</td>
             <td>1214P</td>
             <td>3543</td>
             <td>WAYNE AVE</td>
@@ -1859,16 +1845,16 @@ WHERE
             <td>1448947790</td>
             <td>1</td>
             <td>GKX9331</td>
-            <td>2019-06-29</td>
+            <td>06/29/2019</td>
             <td>1030P</td>
             <td>None</td>
             <td>S/W C/O W 45 ST</td>
         </tr>
         <tr>
-            <td>1452062158</td>
+            <td>1452062286</td>
             <td>1</td>
             <td>GR8C1VIC</td>
-            <td>2019-06-14</td>
+            <td>06/14/2019</td>
             <td>0315P</td>
             <td>None</td>
             <td>RIVERBANK STATE PARK</td>
@@ -1877,25 +1863,25 @@ WHERE
             <td>1449470622</td>
             <td>1</td>
             <td>GUC5106</td>
-            <td>2019-07-03</td>
+            <td>07/03/2019</td>
             <td>1035P</td>
             <td>1060</td>
             <td>BEACH AVE</td>
         </tr>
         <tr>
-            <td>1451262115</td>
+            <td>1451262127</td>
             <td>1</td>
             <td>GWC4311</td>
-            <td>2019-06-30</td>
+            <td>06/30/2019</td>
             <td>0728P</td>
             <td>None</td>
             <td>SURF AVE</td>
         </tr>
         <tr>
-            <td>1452186868</td>
+            <td>1452186870</td>
             <td>1</td>
             <td>GXL4110</td>
-            <td>2019-06-30</td>
+            <td>06/30/2019</td>
             <td>0548P</td>
             <td>170 01</td>
             <td>118 RD</td>
@@ -1904,16 +1890,16 @@ WHERE
             <td>1449142590</td>
             <td>1</td>
             <td>HAT3306</td>
-            <td>2019-06-26</td>
+            <td>06/26/2019</td>
             <td>0938A</td>
             <td>811</td>
             <td>E 219 ST</td>
         </tr>
         <tr>
-            <td>1454273847</td>
+            <td>1454273859</td>
             <td>1</td>
             <td>HDC7519</td>
-            <td>2019-07-02</td>
+            <td>07/02/2019</td>
             <td>0447A</td>
             <td>811</td>
             <td>HICKS ST</td>
@@ -1962,6 +1948,25 @@ HAVING
  COUNT(*) > 1;
 ```
 
+     * postgresql://postgres:***@localhost/local
+    (psycopg2.errors.UndefinedColumn) column "fee" does not exist
+    LINE 4:     MIN(fee) AS fee
+                    ^
+    
+    [SQL: SELECT 
+     -- Include SELECT list columns
+     summons_number, 
+        MIN(fee) AS fee
+    FROM 
+     parking_violation 
+    GROUP BY
+     -- Define column for GROUP BY
+     summons_number 
+    HAVING 
+     -- Restrict to summons numbers with count greater than 1
+     COUNT(*) > 1;]
+    (Background on this error at: https://sqlalche.me/e/20/f405)
+
 ### Detecting invalid values with regular expressions
 
 In the video exercise, we saw that there are a number of ways to detect
@@ -2007,6 +2012,71 @@ WHERE
 
 ```
 
+     * postgresql://postgres:***@localhost/local
+    5000 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>summons_number</th>
+            <th>plate_id</th>
+            <th>registration_state</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1447152396</td>
+            <td>JET2661</td>
+            <td>NY</td>
+        </tr>
+        <tr>
+            <td>1447152402</td>
+            <td>JCV6523</td>
+            <td>NY</td>
+        </tr>
+        <tr>
+            <td>1447152554</td>
+            <td>GMK6954</td>
+            <td>NY</td>
+        </tr>
+        <tr>
+            <td>1447152580</td>
+            <td>JGX1641</td>
+            <td>NY</td>
+        </tr>
+        <tr>
+            <td>1447152724</td>
+            <td>GDM8069</td>
+            <td>NY</td>
+        </tr>
+        <tr>
+            <td>1447152992</td>
+            <td>HXH5242</td>
+            <td>NY</td>
+        </tr>
+        <tr>
+            <td>1447153315</td>
+            <td>HXM3470</td>
+            <td>NY</td>
+        </tr>
+        <tr>
+            <td>1447153327</td>
+            <td>GWH9640</td>
+            <td>NY</td>
+        </tr>
+        <tr>
+            <td>1447153340</td>
+            <td>HKB1769</td>
+            <td>NY</td>
+        </tr>
+        <tr>
+            <td>1447153352</td>
+            <td>GDH2184</td>
+            <td>ME</td>
+        </tr>
+    </tbody>
+</table>
+
 ```sql
 %%sql
 SELECT
@@ -2020,6 +2090,71 @@ WHERE
   plate_type NOT SIMILAR TO '[A-Z]{3}';
 
 ```
+
+     * postgresql://postgres:***@localhost/local
+    5000 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>summons_number</th>
+            <th>plate_id</th>
+            <th>plate_type</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1447152396</td>
+            <td>JET2661</td>
+            <td>PAS</td>
+        </tr>
+        <tr>
+            <td>1447152402</td>
+            <td>JCV6523</td>
+            <td>PAS</td>
+        </tr>
+        <tr>
+            <td>1447152554</td>
+            <td>GMK6954</td>
+            <td>PAS</td>
+        </tr>
+        <tr>
+            <td>1447152580</td>
+            <td>JGX1641</td>
+            <td>PAS</td>
+        </tr>
+        <tr>
+            <td>1447152724</td>
+            <td>GDM8069</td>
+            <td>COM</td>
+        </tr>
+        <tr>
+            <td>1447152992</td>
+            <td>HXH5242</td>
+            <td>PAS</td>
+        </tr>
+        <tr>
+            <td>1447153315</td>
+            <td>HXM3470</td>
+            <td>PAS</td>
+        </tr>
+        <tr>
+            <td>1447153327</td>
+            <td>GWH9640</td>
+            <td>PAS</td>
+        </tr>
+        <tr>
+            <td>1447153340</td>
+            <td>HKB1769</td>
+            <td>PAS</td>
+        </tr>
+        <tr>
+            <td>1447153352</td>
+            <td>GDH2184</td>
+            <td>PAS</td>
+        </tr>
+    </tbody>
+</table>
 
 ```sql
 %%sql
@@ -2095,69 +2230,22 @@ WHERE
 ```
 
      * postgresql://postgres:***@localhost/local
-    1189 rows affected.
-
-<table>
-    <thead>
-        <tr>
-            <th>summons_number</th>
-            <th>plate_id</th>
-            <th>vehicle_year</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>1447152402</td>
-            <td>JCV6523</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>1447152724</td>
-            <td>GDM8069</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>1447184282</td>
-            <td>JET2379</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>1449253015</td>
-            <td>JDY2603</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>1449291508</td>
-            <td>IHBN76</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>1449291673</td>
-            <td>KRKG91</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>1449331956</td>
-            <td>KXJ3298</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>1449335275</td>
-            <td>KNZ7563</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>1449335299</td>
-            <td>JEF4708</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>1449352844</td>
-            <td>KGP285</td>
-            <td>0</td>
-        </tr>
-    </tbody>
-</table>
+    (psycopg2.errors.UndefinedFunction) operator does not exist: text < integer
+    LINE 10:   vehicle_year NOT BETWEEN 1970 AND 2021;
+                            ^
+    HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+    
+    [SQL: SELECT
+      -- Define the columns to return from the query
+      summons_number,
+      plate_id,
+      vehicle_year
+    FROM
+      parking_violation
+    WHERE
+      -- Define the range constraint for invalid vehicle years
+      vehicle_year NOT BETWEEN 1970 AND 2021;]
+    (Background on this error at: https://sqlalche.me/e/20/f405)
 
 ### Identifying invalid parking violations
 
@@ -2196,7 +2284,6 @@ FROM
 WHERE 
   -- Condition on values outside of the restricted range
   violation_time NOT BETWEEN from_hours_in_effect AND to_hours_in_effect;
-
 ```
 
 ```sql
@@ -2212,7 +2299,6 @@ WHERE
   -- Exclude results with overnight restrictions
   from_hours_in_effect < to_hours_in_effect AND 
   violation_time NOT BETWEEN from_hours_in_effect AND to_hours_in_effect;
-
 ```
 
 ### Invalid violations with overnight parking restrictions
@@ -2258,7 +2344,6 @@ WHERE
   violation_time < from_hours_in_effect AND
   -- Ensure violation_time greater than to hours
   violation_time > to_hours_in_effect;
-
 ```
 
 ### Recovering deleted data
@@ -2289,8 +2374,50 @@ in the new `borough` column.
 %%sql
 -- Select all zip codes from the borough of Manhattan
 SELECT zip_code FROM nyc_zip_codes WHERE borough = 'Manhattan';
-
 ```
+
+     * postgresql://postgres:***@localhost/local
+    43 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>zip_code</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>10026</td>
+        </tr>
+        <tr>
+            <td>10027</td>
+        </tr>
+        <tr>
+            <td>10030</td>
+        </tr>
+        <tr>
+            <td>10037</td>
+        </tr>
+        <tr>
+            <td>10039</td>
+        </tr>
+        <tr>
+            <td>10001</td>
+        </tr>
+        <tr>
+            <td>10011</td>
+        </tr>
+        <tr>
+            <td>10018</td>
+        </tr>
+        <tr>
+            <td>10019</td>
+        </tr>
+        <tr>
+            <td>10020</td>
+        </tr>
+    </tbody>
+</table>
 
 ```sql
 %%sql
@@ -2313,6 +2440,60 @@ FROM
  film_permit
 
 ```
+
+     * postgresql://postgres:***@localhost/local
+    4999 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>event_id</th>
+            <th>borough</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>446040</td>
+            <td>Manhattan</td>
+        </tr>
+        <tr>
+            <td>446168</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>186438</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>445255</td>
+            <td>Brooklyn</td>
+        </tr>
+        <tr>
+            <td>128794</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>43547</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>66846</td>
+            <td>Brooklyn</td>
+        </tr>
+        <tr>
+            <td>104342</td>
+            <td>Manhattan</td>
+        </tr>
+        <tr>
+            <td>244863</td>
+            <td>Bronx</td>
+        </tr>
+        <tr>
+            <td>446379</td>
+            <td>Manhattan</td>
+        </tr>
+    </tbody>
+</table>
 
 ## Converting Data
 
@@ -2360,8 +2541,50 @@ SELECT
   END AS is_violation_in_front
 FROM
   parking_violation;
-
 ```
+
+     * postgresql://postgres:***@localhost/local
+    5000 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>is_violation_in_front</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>True</td>
+        </tr>
+        <tr>
+            <td>True</td>
+        </tr>
+        <tr>
+            <td>True</td>
+        </tr>
+        <tr>
+            <td>True</td>
+        </tr>
+        <tr>
+            <td>True</td>
+        </tr>
+        <tr>
+            <td>True</td>
+        </tr>
+        <tr>
+            <td>False</td>
+        </tr>
+        <tr>
+            <td>True</td>
+        </tr>
+        <tr>
+            <td>False</td>
+        </tr>
+        <tr>
+            <td>True</td>
+        </tr>
+    </tbody>
+</table>
 
 ### Applying aggregate functions to converted values
 
@@ -2396,8 +2619,23 @@ SELECT
   MAX(summons_number::BIGINT) - MIN(summons_number::BIGINT) AS range_size
 FROM
   parking_violation;
-
 ```
+
+     * postgresql://postgres:***@localhost/local
+    1 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>range_size</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>2954656568</td>
+        </tr>
+    </tbody>
+</table>
 
 ### Cleaning invalid dates
 
@@ -2433,6 +2671,49 @@ FROM
 
 ```
 
+     * postgresql://postgres:***@localhost/local
+    5000 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>date_first_observed</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+    </tbody>
+</table>
+
 ```sql
 %%sql
 SELECT
@@ -2440,8 +2721,50 @@ SELECT
   DATE(NULLIF(date_first_observed, '0')) AS date_first_observed
 FROM
   parking_violation;
-
 ```
+
+     * postgresql://postgres:***@localhost/local
+    5000 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>date_first_observed</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+    </tbody>
+</table>
 
 ### Converting and displaying dates
 
@@ -2472,11 +2795,78 @@ SELECT
   -- Convert issue_date to a DATE
   DATE(issue_date) AS issue_date,
   -- Convert date_first_observed to a DATE
-  DATE(date_first_observed) AS date_first_observed
+  CASE  -- added/edited
+    WHEN date_first_observed = '0' THEN NULL
+    ELSE DATE(date_first_observed)
+  END AS date_first_observed
 FROM
   parking_violation;
-
 ```
+
+     * postgresql://postgres:***@localhost/local
+    5000 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>summons_number</th>
+            <th>issue_date</th>
+            <th>date_first_observed</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1447152396</td>
+            <td>2019-06-28</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>1447152402</td>
+            <td>2019-06-28</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>1447152554</td>
+            <td>2019-06-16</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>1447152580</td>
+            <td>2019-06-24</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>1447152724</td>
+            <td>2019-07-06</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>1447152992</td>
+            <td>2019-06-14</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>1447153315</td>
+            <td>2019-06-14</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>1447153327</td>
+            <td>2019-06-14</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>1447153340</td>
+            <td>2019-06-28</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>1447153352</td>
+            <td>2019-07-06</td>
+            <td>None</td>
+        </tr>
+    </tbody>
+</table>
 
 ```sql
 %%sql
@@ -2490,12 +2880,80 @@ FROM (
   SELECT
     summons_number,
     DATE(issue_date) AS issue_date,
-    DATE(date_first_observed) AS date_first_observed
+    CASE  -- added/edited
+      WHEN date_first_observed <> '0' THEN DATE(date_first_observed)
+      ELSE NULL
+    END AS date_first_observed
   FROM
     parking_violation
 ) sub
 
 ```
+
+     * postgresql://postgres:***@localhost/local
+    5000 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>summons_number</th>
+            <th>issue_date</th>
+            <th>date_first_observed</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1447152396</td>
+            <td>20190628</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>1447152402</td>
+            <td>20190628</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>1447152554</td>
+            <td>20190616</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>1447152580</td>
+            <td>20190624</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>1447152724</td>
+            <td>20190706</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>1447152992</td>
+            <td>20190614</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>1447153315</td>
+            <td>20190614</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>1447153327</td>
+            <td>20190614</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>1447153340</td>
+            <td>20190628</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>1447153352</td>
+            <td>20190706</td>
+            <td>None</td>
+        </tr>
+    </tbody>
+</table>
 
 ### Extracting hours from a time value
 
@@ -2529,35 +2987,160 @@ information.
 %%sql
 SELECT
   -- Convert violation_time to a TIMESTAMP
-  TO_TIMESTAMP(violation_time, 'HH12MIPM')::TIME AS violation_time
+  TO_TIMESTAMP(
+    -- added/edited
+    CASE
+      WHEN violation_time ~ '^00' THEN REPLACE(REPLACE('12' || SUBSTR(violation_time, 3), 'A', 'AM'), 'P', 'PM')
+      ELSE REPLACE(REPLACE(violation_time, 'A', 'AM'), 'P', 'PM')
+    END,
+    'HH12MIPM'
+  )::TIME AS violation_time
 FROM
   parking_violation
 WHERE
-  -- Exclude NULL violation_time
-  violation_time IS NOT NULL;
+  -- Exclude NULL violation_time and invalid formats
+  violation_time IS NOT NULL
+  -- added/edited
+  AND violation_time ~ '^(0[1-9]|1[0-2])[0-5][0-9][AP]$';
 
 ```
 
-```sql
-%%sql
+     * postgresql://postgres:***@localhost/local
+    4942 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>violation_time</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>10:00:00</td>
+        </tr>
+        <tr>
+            <td>10:11:00</td>
+        </tr>
+        <tr>
+            <td>01:07:00</td>
+        </tr>
+        <tr>
+            <td>03:00:00</td>
+        </tr>
+        <tr>
+            <td>06:53:00</td>
+        </tr>
+        <tr>
+            <td>17:15:00</td>
+        </tr>
+        <tr>
+            <td>17:24:00</td>
+        </tr>
+        <tr>
+            <td>18:01:00</td>
+        </tr>
+        <tr>
+            <td>09:35:00</td>
+        </tr>
+        <tr>
+            <td>12:17:00</td>
+        </tr>
+    </tbody>
+</table>
+
+```python
+%% sql
+-- added/edited
 SELECT
-  -- Populate column with violation_time hours
-  EXTRACT('hour' FROM violation_time) AS hour,
-  COUNT(*)
-FROM (
-    SELECT
-      TO_TIMESTAMP(violation_time, 'HH12MIPM')::TIME as violation_time
-    FROM
-      parking_violation
-    WHERE
-      violation_time IS NOT NULL
-) sub
+    -- Populate column with violation_time hours
+    EXTRACT(
+        'hour'
+        FROM
+            violation_time
+    ) AS hour,
+    COUNT(*)
+FROM
+    (
+        SELECT
+            -- Convert violation_time to a TIMESTAMP
+            TO_TIMESTAMP(
+                -- added/edited
+                CASE
+                    WHEN violation_time ~ '^00' THEN REPLACE(
+                        REPLACE('12' || SUBSTR(violation_time, 3), 'A', 'AM'),
+                        'P',
+                        'PM'
+                    )
+                    ELSE REPLACE(REPLACE(violation_time, 'A', 'AM'), 'P', 'PM')
+                END,
+                'HH12MIPM'
+            ) :: TIME AS violation_time
+        FROM
+            parking_violation
+        WHERE
+            -- Exclude NULL violation_time and invalid formats
+            violation_time IS NOT NULL -- added/edited
+            AND violation_time ~ '^(0[1-9]|1[0-2])[0-5][0-9][AP]$'
+    ) sub
 GROUP BY
-  hour
+    hour
 ORDER BY
-  hour
-
+    hour
 ```
+
+     * postgresql://postgres:***@localhost/local
+    24 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>hour</th>
+            <th>count</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>0</td>
+            <td>136</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>242</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>214</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>149</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>150</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>122</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>107</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>145</td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>270</td>
+        </tr>
+        <tr>
+            <td>9</td>
+            <td>319</td>
+        </tr>
+    </tbody>
+</table>
 
 ### A parking violation report by day of the month
 
@@ -2592,8 +3175,50 @@ SELECT
   DATE(issue_date) AS issue_date
 FROM
   parking_violation;
-
 ```
+
+     * postgresql://postgres:***@localhost/local
+    5000 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>issue_date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>2019-06-28</td>
+        </tr>
+        <tr>
+            <td>2019-06-28</td>
+        </tr>
+        <tr>
+            <td>2019-06-16</td>
+        </tr>
+        <tr>
+            <td>2019-06-24</td>
+        </tr>
+        <tr>
+            <td>2019-07-06</td>
+        </tr>
+        <tr>
+            <td>2019-06-14</td>
+        </tr>
+        <tr>
+            <td>2019-06-14</td>
+        </tr>
+        <tr>
+            <td>2019-06-14</td>
+        </tr>
+        <tr>
+            <td>2019-06-28</td>
+        </tr>
+        <tr>
+            <td>2019-07-06</td>
+        </tr>
+    </tbody>
+</table>
 
 ```sql
 %%sql
@@ -2615,6 +3240,60 @@ ORDER BY
   issue_day;
 
 ```
+
+     * postgresql://postgres:***@localhost/local
+    31 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>issue_day</th>
+            <th>count</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>153</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>161</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>154</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>198</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>205</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>171</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>148</td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>123</td>
+        </tr>
+        <tr>
+            <td>9</td>
+            <td>120</td>
+        </tr>
+        <tr>
+            <td>10</td>
+            <td>86</td>
+        </tr>
+    </tbody>
+</table>
 
 ### Risky parking behavior
 
@@ -2657,7 +3336,6 @@ FROM
 WHERE
   -- Exclude all day parking restrictions
   NOT (from_hours_in_effect = '1200AM' AND to_hours_in_effect = '1159PM');
-
 ```
 
 ```sql
@@ -2678,7 +3356,6 @@ FROM (
   WHERE
     NOT (from_hours_in_effect = '1200AM' AND to_hours_in_effect = '1159PM')
 ) sub
-
 ```
 
 ```sql
@@ -2693,7 +3370,6 @@ WHERE
   hours = 0 AND
   -- Include records with a minutes value of at most 59
   minutes <= 59;
-
 ```
 
 ## Transforming Data
@@ -2733,6 +3409,49 @@ FROM
 
 ```
 
+     * postgresql://postgres:***@localhost/local
+    5000 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>corner</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+    </tbody>
+</table>
+
 ```sql
 %%sql
 SELECT
@@ -2756,6 +3475,60 @@ ORDER BY
   count DESC
 
 ```
+
+     * postgresql://postgres:***@localhost/local
+    477 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>corner</th>
+            <th>count</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>RIVERBANK STATE PARK &amp; LOWER LEVEL</td>
+            <td>10</td>
+        </tr>
+        <tr>
+            <td>FR CAPODANNO BLVD &amp; SAND LN</td>
+            <td>7</td>
+        </tr>
+        <tr>
+            <td>JACOB RIIS PARK &amp; EAST PARKING LOT</td>
+            <td>6</td>
+        </tr>
+        <tr>
+            <td>ROCKAWAY BEACH &amp; SHORE FRONT PKWY</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>BRUCKNER BLVD &amp; WILKINSON AVE</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>CROTONA &amp; CLAREMONT PKWY</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>N/S JEROME AVE &amp; ANDERSON AVE</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td>SURF AVE &amp; W 15TH ST</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td>CLAREMONT PKWY &amp; CROTONA AVE</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td>BEACH 87 ST &amp; ROCKAWAY FWY</td>
+            <td>3</td>
+        </tr>
+    </tbody>
+</table>
 
 ### Creating a TIMESTAMP with concatenation
 
@@ -2806,6 +3579,22 @@ FROM (
 
 ```
 
+```sql
+%%sql
+SELECT
+  -- Convert violation_time to TIMESTAMP
+  TO_TIMESTAMP(violation_datetime, 'MM/DD/YYYY HH12:MIAM') AS violation_datetime
+FROM (
+  SELECT
+    CONCAT(issue_date, ' ', 
+           REPLACE(REPLACE(violation_time, 'A', 'AM'), 'P', 'PM')
+          ) AS violation_datetime
+  FROM
+    parking_violation
+) sub;
+
+```
+
 ### Extracting time units with SUBSTRING()
 
 In a previous exercise, you separated the interval between the
@@ -2839,6 +3628,49 @@ FROM
 
 ```
 
+     * postgresql://postgres:***@localhost/local
+    5000 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>hour</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>10</td>
+        </tr>
+        <tr>
+            <td>10</td>
+        </tr>
+        <tr>
+            <td>01</td>
+        </tr>
+        <tr>
+            <td>03</td>
+        </tr>
+        <tr>
+            <td>06</td>
+        </tr>
+        <tr>
+            <td>05</td>
+        </tr>
+        <tr>
+            <td>05</td>
+        </tr>
+        <tr>
+            <td>06</td>
+        </tr>
+        <tr>
+            <td>09</td>
+        </tr>
+        <tr>
+            <td>12</td>
+        </tr>
+    </tbody>
+</table>
+
 ```sql
 %%sql
 SELECT
@@ -2849,6 +3681,60 @@ FROM
   parking_violation;
 
 ```
+
+     * postgresql://postgres:***@localhost/local
+    5000 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>hour</th>
+            <th>minute</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>10</td>
+            <td>00</td>
+        </tr>
+        <tr>
+            <td>10</td>
+            <td>11</td>
+        </tr>
+        <tr>
+            <td>01</td>
+            <td>07</td>
+        </tr>
+        <tr>
+            <td>03</td>
+            <td>00</td>
+        </tr>
+        <tr>
+            <td>06</td>
+            <td>53</td>
+        </tr>
+        <tr>
+            <td>05</td>
+            <td>15</td>
+        </tr>
+        <tr>
+            <td>05</td>
+            <td>24</td>
+        </tr>
+        <tr>
+            <td>06</td>
+            <td>01</td>
+        </tr>
+        <tr>
+            <td>09</td>
+            <td>35</td>
+        </tr>
+        <tr>
+            <td>12</td>
+            <td>17</td>
+        </tr>
+    </tbody>
+</table>
 
 ### Extracting house numbers from a string
 
@@ -2884,6 +3770,49 @@ FROM
 
 ```
 
+     * postgresql://postgres:***@localhost/local
+    5000 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>dash_position</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>0</td>
+        </tr>
+    </tbody>
+</table>
+
 ```sql
 %%sql
 SELECT
@@ -2901,6 +3830,60 @@ FROM
   parking_violation;
 
 ```
+
+     * postgresql://postgres:***@localhost/local
+    5000 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>house_number</th>
+            <th>new_house_number</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>21</td>
+            <td>21</td>
+        </tr>
+        <tr>
+            <td>545</td>
+            <td>545</td>
+        </tr>
+        <tr>
+            <td>509</td>
+            <td>509</td>
+        </tr>
+        <tr>
+            <td>501</td>
+            <td>501</td>
+        </tr>
+        <tr>
+            <td>341</td>
+            <td>341</td>
+        </tr>
+        <tr>
+            <td>564</td>
+            <td>564</td>
+        </tr>
+        <tr>
+            <td>504</td>
+            <td>504</td>
+        </tr>
+        <tr>
+            <td>515</td>
+            <td>515</td>
+        </tr>
+        <tr>
+            <td>504</td>
+            <td>504</td>
+        </tr>
+        <tr>
+            <td>361</td>
+            <td>361</td>
+        </tr>
+    </tbody>
+</table>
 
 ### Splitting house numbers with a delimiter
 
@@ -2932,6 +3915,49 @@ WHERE
   violation_county = 'Q';
 
 ```
+
+     * postgresql://postgres:***@localhost/local
+    1002 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>new_house_number</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>16</td>
+        </tr>
+        <tr>
+            <td>32</td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tr>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>29</td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tr>
+            <td>16</td>
+        </tr>
+        <tr>
+            <td>80</td>
+        </tr>
+        <tr>
+            <td>05</td>
+        </tr>
+        <tr>
+            <td>50</td>
+        </tr>
+    </tbody>
+</table>
 
 ### Mapping parking restrictions
 
@@ -3044,6 +4070,71 @@ ORDER BY
 
 ```
 
+     * postgresql://postgres:***@localhost/local
+    93 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>violation_code</th>
+            <th>issuing_agency</th>
+            <th>count</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>10</td>
+            <td>P</td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td>11</td>
+            <td>P</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>13</td>
+            <td>K</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>14</td>
+            <td>K</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td>14</td>
+            <td>P</td>
+            <td>485</td>
+        </tr>
+        <tr>
+            <td>14</td>
+            <td>S</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td>16</td>
+            <td>P</td>
+            <td>10</td>
+        </tr>
+        <tr>
+            <td>17</td>
+            <td>P</td>
+            <td>69</td>
+        </tr>
+        <tr>
+            <td>17</td>
+            <td>S</td>
+            <td>8</td>
+        </tr>
+        <tr>
+            <td>18</td>
+            <td>P</td>
+            <td>9</td>
+        </tr>
+    </tbody>
+</table>
+
 ### Using FILTER to create a pivot table
 
 In the previous exercise, you wrote a query that provided information on
@@ -3093,6 +4184,93 @@ ORDER BY
 
 ```
 
+     * postgresql://postgres:***@localhost/local
+    59 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>violation_code</th>
+            <th>Police</th>
+            <th>Sanitation</th>
+            <th>Parks</th>
+            <th>Transportation</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>10</td>
+            <td>3</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>11</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>13</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>14</td>
+            <td>485</td>
+            <td>4</td>
+            <td>4</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>16</td>
+            <td>10</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>17</td>
+            <td>69</td>
+            <td>8</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>18</td>
+            <td>9</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>19</td>
+            <td>203</td>
+            <td>4</td>
+            <td>1</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>20</td>
+            <td>387</td>
+            <td>8</td>
+            <td>17</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>21</td>
+            <td>42</td>
+            <td>271</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+    </tbody>
+</table>
+
 ### Aggregating film categories
 
 For the final exercise in this course, let's return to the `film_permit`
@@ -3139,20 +4317,218 @@ SELECT * FROM cb_categories;
 
 ```
 
+     * postgresql://postgres:***@localhost/local
+    Done.
+    4439 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>community_board</th>
+            <th>category</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>2</td>
+            <td>Television</td>
+        </tr>
+        <tr>
+            <td>12</td>
+            <td>Film</td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>Film</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Television</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Television</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Television</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Television</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>Film</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Television</td>
+        </tr>
+        <tr>
+            <td>11</td>
+            <td>Television</td>
+        </tr>
+    </tbody>
+</table>
+
+```sql
+%%sql
+select * from cb_categories;
+```
+
+     * postgresql://postgres:***@localhost/local
+    4439 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>community_board</th>
+            <th>category</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>2</td>
+            <td>Television</td>
+        </tr>
+        <tr>
+            <td>12</td>
+            <td>Film</td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>Film</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Television</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Television</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Television</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Television</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>Film</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Television</td>
+        </tr>
+        <tr>
+            <td>11</td>
+            <td>Television</td>
+        </tr>
+    </tbody>
+</table>
+
 ```sql
 %%sql
 SELECT
- -- Convert community_board data type
- CAST(community_board AS INTEGER) AS community_board,
+    -- Convert community_board data type
+    CAST(community_board AS INTEGER) AS community_board,
     -- Define pivot table columns
- COUNT(category) FILTER(where category = 'Film') AS "Film",
-    COUNT(category) FILTER(where category = 'Television') AS "Television",
- COUNT(category) FILTER(where category = 'Documentary') AS "Documentary"
-FROM
- cb_categories
-GROUP BY 
- community_board
-ORDER BY 
- community_board;
+    COUNT(category) FILTER (WHERE category = 'Film') AS "Film",
+    COUNT(category) FILTER (WHERE category = 'Television') AS "Television",
+    COUNT(category) FILTER (WHERE category = 'Documentary') AS "Documentary"
+FROM (
+    -- added/edited
+    SELECT
+        community_board,
+        category
+    FROM
+        cb_categories
+    WHERE
+        community_board ~ '^[0-9]+$'
+) AS filtered_cb_categories
+GROUP BY
+    community_board
+ORDER BY
+    community_board;
 
 ```
+
+     * postgresql://postgres:***@localhost/local
+    28 rows affected.
+
+<table>
+    <thead>
+        <tr>
+            <th>community_board</th>
+            <th>Film</th>
+            <th>Television</th>
+            <th>Documentary</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>166</td>
+            <td>899</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>157</td>
+            <td>656</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>90</td>
+            <td>152</td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>84</td>
+            <td>281</td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>131</td>
+            <td>505</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>93</td>
+            <td>188</td>
+            <td>2</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>76</td>
+            <td>110</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>55</td>
+            <td>103</td>
+            <td>2</td>
+        </tr>
+        <tr>
+            <td>9</td>
+            <td>64</td>
+            <td>110</td>
+            <td>1</td>
+        </tr>
+    </tbody>
+</table>
